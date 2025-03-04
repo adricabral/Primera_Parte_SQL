@@ -47,5 +47,22 @@ SELECT * FROM TOP_CELULARES
 
 WHERE RK <= 5
 
+/* É solicitada uma nova tabela a ser preenchida com o preço e status dos Itens no final do dia. 
+Lembre-se de que deve ser reprocessável. Vale ressaltar que na tabela Item teremos apenas o último status informado
+pelo PK definido. (Pode ser resolvido através de StoredProcedure) */
 
 
+CREATE PROCEDURE TABELA_FINAL AS BEGIN
+SELECT I.ITEM_NOME,
+	   O.VALOR_ORDER,
+	  'VENDIDO' AS STATUS_ITEM
+
+FROM ORDERS O 
+
+LEFT JOIN ITEM I ON I.ITEM_ID = O.ITEM_ID
+
+WHERE ORDER_DATE = CONVERT(DATE,GETDATE())
+
+END;
+
+EXEC TABELA_FINAL
